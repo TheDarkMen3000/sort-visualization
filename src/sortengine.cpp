@@ -6,13 +6,13 @@ SortEngine::SortEngine(const char* scriptPath)
     try
     {
         sol::usertype<List> list_type = m_State.new_usertype<List>("List", sol::constructors<List(unsigned int)>());
-        sol::usertype<Rect> rect_type = m_State.new_usertype<Rect>("Rect", sol::constructors<Rect(int, int)>());
 
         list_type["getRectCount"] = &List::getRectCount;
         list_type["getRect"] = &List::getRect;
         list_type["swap"] = &List::swap;
-
-        rect_type["getValue"] = &Rect::getValue;
+        list_type["getValue"] = &List::getValue;
+        list_type["setMarked"] = &List::setMarked;
+        list_type["setSwapTimeout"] = &List::setSwapTimeout;
 
         m_State.safe_script_file(scriptPath);
 

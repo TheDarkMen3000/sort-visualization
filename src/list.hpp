@@ -11,6 +11,8 @@ private:
 
     unsigned int m_MarkIndex, m_Swap1Index, m_Swap2Index;
 
+    unsigned int m_SwapTimeout;
+
 public:
     List(unsigned int count);
     List(const List& other) = delete;
@@ -21,13 +23,18 @@ public:
     Rect** getRects() const;
     unsigned int getRectCount() const;
 
-    Rect* getRect(unsigned int) const;
+    Rect* getRect(unsigned int index) const;
+    unsigned int getValue(unsigned int index) const;
 
     unsigned int getMarked() const;
+    unsigned int setMarked(unsigned int index);
+
     bool wasSwaped(Rect* rect) const;
 
     void shuffel();
     void swap(unsigned int index1, unsigned int index2);
+
+    void setSwapTimeout(unsigned int time);
 
     Rect* operator[](int index);
 
