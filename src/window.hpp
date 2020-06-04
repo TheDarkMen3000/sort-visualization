@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <atomic>
 
 class Window
 {
@@ -13,6 +14,7 @@ private:
 
 public:
     static GLuint rectVAO;
+    static std::atomic<bool> running;
 
     ~Window();
 

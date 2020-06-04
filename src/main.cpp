@@ -1,17 +1,13 @@
 #include "window.hpp"
 #include "renderer.hpp"
 #include "list.hpp"
+#include "sortengine.hpp"
 #include <iostream>
 #include <thread>
-#include <atomic>
-
-void bubblesort(List* list);
-
-std::atomic<bool> running;
+#include <sol/sol.hpp>
 
 int main()
 {
-    running = true;
     Window win;
 
     if (!win.init(800, 800, "Sort visualisation"))
@@ -24,7 +20,9 @@ int main()
 
     Renderer renderer(&rects);
 
-    std::thread sort(bubblesort, &rects);
+    SortEngine sEngine("lua/bubblesort.lua");
+
+    sEngine.sort(&rects);
 
     while (win.isOpen())
     {
@@ -35,23 +33,7 @@ int main()
         win.update();
     }
 
-    running = false;
-
-    sort.join();
+    sEngine.join();
 
     return 0;
-}
-
-void bubblesort(List* list)
-{
-    for (int n = list->getRectCount(); n > 1 && running; n--)
-    {
-        for (int i = 0; i < n - 1; i++)
-        {
-            if (list->getRect(i)->getValue() > list->getRect(i + 1)->getValue())
-            {
-                list->swap(i, i + 1);
-            }
-        }
-    }
 }

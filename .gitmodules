@@ -4,3 +4,9 @@
 [submodule "lib/glew"]
 	path = lib/glew
 	url = https://github.com/Perlmint/glew-cmake
+[submodule "lib/sol2"]
+	path = lib/sol2
+	url = https://github.com/ThePhD/sol2
+[submodule "lib/lua"]
+	path = lib/lua
+	url = https://github.com/LuaDist/lua
