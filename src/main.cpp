@@ -1,57 +1,55 @@
 #include "window.hpp"
 #include "renderer.hpp"
 #include "list.hpp"
+#include "sortengine.hpp"
 #include <iostream>
 #include <thread>
-#include <atomic>
+#include <sol/sol.hpp>
 
-void bubblesort(List* list);
+void parseArgs(int argv, char** args);
 
-std::atomic<bool> running;
-
-int main()
+int main(int argv, char** args)
 {
-    running = true;
-    Window win;
-
-    if (!win.init(800, 800, "Sort visualisation"))
+    if (argv == 2)
     {
-        std::cout << "Could not create window!" << std::endl;
-        return -1;
-    }
+        const char* scriptPath = args[1];
 
-    List rects(100);
+        Window win;
 
-    Renderer renderer(&rects);
-
-    std::thread sort(bubblesort, &rects);
-
-    while (win.isOpen())
-    {
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        renderer.render();
-
-        win.update();
-    }
-
-    running = false;
-
-    sort.join();
-
-    return 0;
-}
-
-void bubblesort(List* list)
-{
-    for (int n = list->getRectCount(); n > 1 && running; n--)
-    {
-        for (int i = 0; i < n - 1; i++)
+        if (!win.init(800, 800, "Sort visualisation"))
         {
-            if (list->getRect(i)->getValue() > list->getRect(i + 1)->getValue())
-            {
-                list->swap(i, i + 1);
-            }
+            std::cout << "Could not create window!" << std::endl;
+            return -1;
         }
+
+        List rects(100);
+
+        Renderer renderer(&rects);
+
+        try 
+        {
+            SortEngine sEngine(scriptPath);
+
+            sEngine.sort(&rects);
+
+            while (win.isOpen())
+            {
+                glClear(GL_COLOR_BUFFER_BIT);
+
+                renderer.render();
+
+                win.update();
+            }
+
+            sEngine.join();
+        }
+        catch (sol::error &e)
+        {
+            std::cout << "Lua Error: " << e.what() << std::endl;
+        }
+
+        return 0;
     }
+    
+    std::cout << "Usage: sort <Algorithm script file>" << std::endl;
 }

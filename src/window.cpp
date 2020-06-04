@@ -2,12 +2,15 @@
 
 GLuint Window::rectVAO = 0;
 GLuint Window::rectVBO = 0;
+std::atomic<bool> Window::running = false;
 
 Window::~Window()
 {
     if (m_Win) { glfwDestroyWindow(m_Win); }
 
     glfwTerminate();
+
+    running = false;
 }
 
 bool Window::init(int width, int height, const char* title)
@@ -57,12 +60,15 @@ bool Window::init(int width, int height, const char* title)
         glBindVertexArray(0);
     }
 
+    running = true;
+
     return true;
 }
 
 bool Window::isOpen()
 {
-    return !glfwWindowShouldClose(m_Win);
+    running = !glfwWindowShouldClose(m_Win);
+    return running;
 }
 
 void Window::update()

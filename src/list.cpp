@@ -12,6 +12,8 @@ List::List(unsigned int count)
     m_Swap1Index = -1;
     m_Swap2Index = -1;
 
+    m_SwapTimeout = 5;
+
     for (unsigned int i = 0; i < m_RectCount; i++)
     {
         m_Rects[i] = new Rect(i, i);
@@ -49,9 +51,27 @@ Rect* List::getRect(unsigned int index) const
     return 0;
 }
 
+unsigned int List::getValue(unsigned int index) const
+{
+    Rect* result = getRect(index);
+
+    if (result) return result->getValue();
+    else return 0;
+}
+
 unsigned int List::getMarked() const
 {
     return m_MarkIndex;
+}
+
+unsigned int List::setMarked(unsigned int index)
+{
+    if (index >= 0 && index < m_RectCount)
+    {
+        m_MarkIndex = index;
+        return getValue(index);
+    }
+    return 0;
 }
 
 bool List::wasSwaped(Rect* rect) const
@@ -84,7 +104,7 @@ void List::swap(unsigned int index1, unsigned int index2)
         m_Swap1Index = index1;
         m_Swap2Index = index2;
 
-        std::this_thread::sleep_for(std::chrono::duration<int,std::milli>(5));
+        std::this_thread::sleep_for(std::chrono::duration<int,std::milli>(m_SwapTimeout));
     }
 }
 
@@ -100,6 +120,11 @@ void List::_swap(unsigned int index1, unsigned int index2)
         m_Rects[index1]->setIndex(index1);
         m_Rects[index2]->setIndex(index2);
     }
+}
+
+void List::setSwapTimeout(unsigned int time)
+{
+    m_SwapTimeout = time;
 }
 
 Rect* List::operator[](int index)
