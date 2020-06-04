@@ -9,6 +9,8 @@ The application uses the following dependencies.
 
 - [GLFW](https://github.com/glfw/glfw)
 - [GLEW](https://github.com/nigels-com/glew) with CMake support from [here](https://github.com/Perlmint/glew-cmake)
+- [Lua](https://github.com/LuaDist/lua)
+- [sol2](https://github.com/ThePhD/sol2)
 
 All these dependencies are added through git submodules. In order to clone this repository the clone option '--recursive' is recommended. Copy the following command to clone this repository to your device.
 
