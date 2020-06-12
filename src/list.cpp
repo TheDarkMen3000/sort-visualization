@@ -127,7 +127,7 @@ void List::setSwapTimeout(unsigned int time)
     m_SwapTimeout = time;
 }
 
-Rect* List::operator[](int index)
+Rect* List::operator[](unsigned int index)
 {
     if (index < m_RectCount)
     {

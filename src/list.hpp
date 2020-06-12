@@ -36,7 +36,7 @@ public:
 
     void setSwapTimeout(unsigned int time);
 
-    Rect* operator[](int index);
+    Rect* operator[](unsigned int index);
 
 private:
     void _swap(unsigned int index1, unsigned int index2);
